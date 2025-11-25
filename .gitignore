@@ -1,0 +1,65 @@
+# ---------------------------------
+# OS junk
+# ---------------------------------
+.DS_Store
+Thumbs.db
+
+# ---------------------------------
+# STM32CubeIDE
+# ---------------------------------
+.settings/
+.metadata/
+.cproject
+.project
+.loadpath
+stm32cubeide.project.prefs
+.vscode/
+*.launch
+
+# ---------------------------------
+# Build artifacts (CubeIDE, Make, CMake)
+# ---------------------------------
+/Debug/
+/Release/
+/build/
+/cmake-build-*/
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.out
+
+# Coverage
+*.gcno
+*.gcda
+*.gcov
+
+# ---------------------------------
+# STM32CubeMX
+# ---------------------------------
+*.mxproject
+MX_Device/
+
+# ---------------------------------
+# Logs & temporary
+# ---------------------------------
+*.log
+*.tmp
+*.bak
+
+# ---------------------------------
+# Documentation build
+# ---------------------------------
+/docs/_build/
+/docs/build/
+
+# ---------------------------------
+# Archives
+# ---------------------------------
+*.zip
+*.7z
+*.tar
+*.gz
