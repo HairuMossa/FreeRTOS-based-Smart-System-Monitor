@@ -1,11 +1,9 @@
-#include "main.h"
-#include "stdint.h"
-#include "rtos_system_status.h"
-#include "rtos_logger.h"
-#include "lis3dsh.h"
 #include "rtos_tasks.h"
-#include <string.h>
 
+
+/* Pointer to generic accelerometer driver */
+extern ACCELERO_DrvTypeDef Lis3dshDrv;
+ACCELERO_DrvTypeDef *AcceleroDrv = &Lis3dshDrv;
 
 /**
  * variable to hold the received uart command from ISR
@@ -71,9 +69,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
   }
 }
 
-/* Pointer to generic accelerometer driver */
-extern ACCELERO_DrvTypeDef Lis3dshDrv;
-ACCELERO_DrvTypeDef *AcceleroDrv = &Lis3dshDrv;
+
 
 void Acc_config_init(void){
   /* start the UART intterupt by passing the variable that will hold the received message*/
@@ -231,7 +227,7 @@ void SensorFunction_Entry(void *argument)
         LogPrint(" Accel %d : %d.%03d", i, int_part, dec_part);
     }
 
-        /**
+    /**
      * RED - POWER 
      * GREEN    - X Axis is between 0.9g and 1g and off otherwise
      * ORANGE   - Y Axis is between 0.9g and 1g and off otherwise

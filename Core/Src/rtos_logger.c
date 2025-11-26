@@ -1,9 +1,4 @@
 #include "rtos_logger.h"
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include "main.h" 
-#include "rtos_logger.h"
 
 extern UART_HandleTypeDef huart2;
 
