@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 /**
  * @file rtos_logger.h
@@ -13,13 +12,10 @@
  * @copyright Copyright (c) 2025
  * 
  */
-=======
->>>>>>> ae402f51ded0bba1f645ea3db9f6517f5bdb5027
 #ifndef __RTOS_LOGGER_H
 #define __RTOS_LOGGER_H
 
 #include "cmsis_os.h"
-<<<<<<< HEAD
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -35,16 +31,10 @@
  * @brief Log message structure to hold formatted log strings.
  * 
  */
-=======
-
-#define MAX_LOG_SIZE            64
-
->>>>>>> ae402f51ded0bba1f645ea3db9f6517f5bdb5027
 typedef struct{
     char buffer[MAX_LOG_SIZE];
 }LogMessage_t;
 
-<<<<<<< HEAD
 
 /**
  * @brief Handle for the print message queue.
@@ -58,11 +48,6 @@ extern osMessageQueueId_t PrintQueueHandle;
  * @param format Format string (like printf).
  * @param ... Variable arguments for formatting.
  */
-=======
-extern osMessageQueueId_t PrintQueueHandle;
-
-
->>>>>>> ae402f51ded0bba1f645ea3db9f6517f5bdb5027
 void LogPrint(const char *format, ...); // Variadic function
 
 #endif // __RTOS_LOGGER_H
