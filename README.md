@@ -86,7 +86,7 @@ using USART2 on the STM32F407 (PA2/PA3) to the Virtual COM Port (VCP) pins on th
 
 | File | Location | Description |
 |------|----------|-------------|
-| rtos_system_state.c | Core/Src/ | Manages overall system state and state-machine logic |
+| rtos_system_status.c | Core/Src/ | Manages overall system state and state-machine logic |
 | rtos_tasks.c | Core/Src/ | FreeRTOS task implementations (sensor read, manager, print) |
 | rtos_logger.c | Core/Src/ | Simple logging utility for events and errors |
 | lis3dsh_io.c | Drivers/LIS3DSH/Source/ | SPI I/O and register access for the LIS3DSH accelerometer |
