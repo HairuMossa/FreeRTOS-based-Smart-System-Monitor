@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * @file rtos_tasks.h
  * @author Hairu Mossa
@@ -18,16 +19,28 @@
 #include <string.h>
 
 
+=======
+#ifndef __RTOS_TASKS_H
+#define __RTOS_TASKS_H
+
+>>>>>>> ae402f51ded0bba1f645ea3db9f6517f5bdb5027
 extern osMessageQueueId_t CommandQueueHandle; /* CommandQueue*/
 
 extern osMessageQueueId_t PrintQueueHandle; /*PrintQueue*/
 
 extern UART_HandleTypeDef huart2;
+<<<<<<< HEAD
 
 /*debounce variable*/
 static volatile uint32_t last_interrupt_time = 0; 
 
 
+=======
+static volatile uint32_t last_interrupt_time = 0; 
+
+
+
+>>>>>>> ae402f51ded0bba1f645ea3db9f6517f5bdb5027
 extern volatile uint8_t rxCommand;
 
 typedef struct{
@@ -38,6 +51,7 @@ typedef struct{
     uint8_t uart_error; /* if wrong button is pressed, error = 0x01, else 0x00*/
 }CommandMessage_t;
 
+<<<<<<< HEAD
 /**
  * @brief Configures the accelerometer sensor.
  * 
@@ -63,6 +77,11 @@ void PrintFunction_Entry(void * arguument);
  * 
  * @param argument 
  */
+=======
+void Acc_config_init(void);
+void ManagerFunction_Entry(void *argument);
+void PrintFunction_Entry(void * arguument);
+>>>>>>> ae402f51ded0bba1f645ea3db9f6517f5bdb5027
 void SensorFunction_Entry(void *argument);
 
 

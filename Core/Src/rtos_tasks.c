@@ -70,7 +70,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 }
 
 
-
 void Acc_config_init(void){
   /* start the UART intterupt by passing the variable that will hold the received message*/
   HAL_UART_Receive_IT(&huart2, (uint8_t *)&rxCommand, 1);
