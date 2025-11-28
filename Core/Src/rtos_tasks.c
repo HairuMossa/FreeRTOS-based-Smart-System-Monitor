@@ -187,12 +187,23 @@ void SensorFunction_Entry(void *argument)
     int16_t AccelRaw[3];   // X, Y, Z raw
     float   Accel_g[3];    // X, Y, Z in g
     
+    uint8_t whoami;
+
+    /*Trying to read WHO_AM_I until we get the correct response (0x3F) */
+    do {
+        whoami = AcceleroDrv->ReadID();
+        if(whoami != 0x3F) {
+            LogPrint("Waiting for LIS3DSH... (Read: 0x%02X)", whoami);
+            osDelay(100); 
+        }
+    } while (whoami != 0x3F);
+
+    LogPrint("Sensor Connected! ID: 0x3F");
+
     /*configure accelerometer sensor*/
     Acc_config_init();
-    uint8_t whoami = AcceleroDrv->ReadID();
+    osDelay(100);
 
-    /*print the sensor ID , 0x3F*/
-    LogPrint("Accelerometer ID(0x3F): %d", whoami);
 
     SystemState_e currentSystemState = GetSystemState();
     
@@ -209,75 +220,75 @@ void SensorFunction_Entry(void *argument)
         Accel_g[1] = (float)AccelRaw[1] / 1000.0f; // Y in g
         Accel_g[2] = (float)AccelRaw[2] / 1000.0f; // Z in g
 
-    /*for debugging*/
-    for(int i=0; i<3; i++) {
-        float val = Accel_g[i];
+        /*for debugging*/
+        for(int i=0; i<3; i++) {
+            float val = Accel_g[i];
 
-        /*Extract integer part (eg 0 from 0.98)*/ 
-        int int_part = (int)val;
+            /*Extract integer part (eg 0 from 0.98)*/ 
+            int int_part = (int)val;
 
-        /* Extract decimal part (eg 980 from 0.98)*/
-        int dec_part = (int)((val - int_part) * 1000);
+            /* Extract decimal part (eg 980 from 0.98)*/
+            int dec_part = (int)((val - int_part) * 1000);
 
-        /*Handle negative decimals*/
-        if(dec_part < 0) dec_part = -dec_part;
+            /*Handle negative decimals*/
+            if(dec_part < 0) dec_part = -dec_part;
 
-        /* Print as "Integer.Decimal"*/
-        LogPrint(" Accel %d : %d.%03d", i, int_part, dec_part);
-    }
+            /* Print as "Integer.Decimal"*/
+            LogPrint(" Accel %d : %d.%03d", i, int_part, dec_part);
+        }
 
-    /**
-     * RED - POWER 
-     * GREEN    - X Axis is between 0.9g and 1g and off otherwise
-     * ORANGE   - Y Axis is between 0.9g and 1g and off otherwise
-     * BLUE     - Z Axis is between 0.9g and 1g and off otherwise 
-     */
-    switch(currentSystemState){
-        case IDLE:
-            HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
-            osDelay(100);
-            HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);
-            osDelay(100);
+        /**
+         * RED - POWER 
+         * GREEN    - X Axis is between 0.9g and 1g and off otherwise
+         * ORANGE   - Y Axis is between 0.9g and 1g and off otherwise
+         * BLUE     - Z Axis is between 0.9g and 1g and off otherwise 
+         */
+        switch(currentSystemState){
+            case IDLE:
+                HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
+                osDelay(100);
+                HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);
+                osDelay(100);
 
-            HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
-            HAL_GPIO_WritePin(LED_ORANGE_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
-            HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET);
-
-            LogPrint("IDLE\r\n");
-            break;
-        
-
-        case RUNNING:
-            HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
-
-            /* X Axis */
-            if(Accel_g[0] >= 0.9 && Accel_g[0] <= 1){
-                HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
-            }
-            else{
                 HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
-            }
-
-            /* Y Axis */
-            if(Accel_g[1] >= 0.9 && Accel_g[1] <= 1){
-                HAL_GPIO_WritePin(LED_ORANGE_GPIO_Port, LED_ORANGE_Pin, GPIO_PIN_SET);
-            }
-            else{
                 HAL_GPIO_WritePin(LED_ORANGE_GPIO_Port, LED_ORANGE_Pin, GPIO_PIN_RESET);
-            }
-
-            /* Z Axis */
-            if(Accel_g[2] >= 0.9 && Accel_g[2] <= 1){
-                HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
-            }
-            else{
                 HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET);
-            }
-            LogPrint("RUNNING\r\n");
-            break;
-    }    
 
-    osDelay(500);
+                LogPrint("IDLE\r\n");
+                break;
+            
+
+            case RUNNING:
+                HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
+
+                /* X Axis */
+                if(Accel_g[0] >= 0.9 && Accel_g[0] <= 1){
+                    HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);
+                }
+                else{
+                    HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
+                }
+
+                /* Y Axis */
+                if(Accel_g[1] >= 0.9 && Accel_g[1] <= 1){
+                    HAL_GPIO_WritePin(LED_ORANGE_GPIO_Port, LED_ORANGE_Pin, GPIO_PIN_SET);
+                }
+                else{
+                    HAL_GPIO_WritePin(LED_ORANGE_GPIO_Port, LED_ORANGE_Pin, GPIO_PIN_RESET);
+                }
+
+                /* Z Axis */
+                if(Accel_g[2] >= 0.9 && Accel_g[2] <= 1){
+                    HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
+                }
+                else{
+                    HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_RESET);
+                }
+                LogPrint("RUNNING\r\n");
+                break;
+        }    
+
+        osDelay(500);
     }
   /* USER CODE END SensorFunction */
 }
